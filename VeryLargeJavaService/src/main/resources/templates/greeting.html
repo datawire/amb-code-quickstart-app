@@ -5,7 +5,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<p th:text="'Hello, ' + ${name} + '!'" />
-<p th:text="'Color, ' + ${color} + '!'" />
+<h1 th:style="'color:' + ${color}">Welcome to the EdgyCorp WebApp</h1>
+
+<p th:text="'There are ' + ${recordCount} + ' number of database records available to search!'" />
+
+<p th:text="'The contents of this page were generated from the \'' + ${environment} + '\' environment!'" />
+
+<p>The architecture that powers this page is show below: </p>
+<img src="architecture.jpg" />
+
 </body>
 </html>

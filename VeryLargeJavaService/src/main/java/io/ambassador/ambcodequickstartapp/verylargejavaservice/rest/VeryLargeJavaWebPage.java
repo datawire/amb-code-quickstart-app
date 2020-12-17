@@ -1,6 +1,7 @@
 package io.ambassador.ambcodequickstartapp.verylargejavaservice.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -21,6 +22,12 @@ public class VeryLargeJavaWebPage {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Value("${nodeservice.host}")
+    String nodeServiceHost;
+
+    @Value("${nodeservice.port}")
+    String nodeServicePort;
+
     @GetMapping("/greeting")
     public String greeting(@RequestParam(name = "name", required = false, defaultValue = "World") String name, Model model,
                            @RequestHeader Map<String, String> headers) {
@@ -28,7 +35,7 @@ public class VeryLargeJavaWebPage {
 
         System.out.println("Headers" + headers);
 
-        String color = restTemplate.getForObject("http://localhost:3000/color", String.class);
+        String color = restTemplate.getForObject("http://" + nodeServiceHost+ ":" + nodeServicePort + "/color", String.class);
         color = color.replace("\"", "");
         model.addAttribute("color", color);
 
