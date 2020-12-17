@@ -35,9 +35,17 @@ public class VeryLargeJavaWebPage {
 
         System.out.println("Headers" + headers);
 
-        String color = restTemplate.getForObject("http://" + nodeServiceHost+ ":" + nodeServicePort + "/color", String.class);
+        String nodeServiceURL = "http://" + nodeServiceHost + ":" + nodeServicePort;
+
+        String color = restTemplate.getForObject(nodeServiceURL + "/color", String.class);
         color = color.replace("\"", "");
         model.addAttribute("color", color);
+
+        String environment = restTemplate.getForObject(nodeServiceURL + "/environment", String.class);
+        model.addAttribute("environment", environment);
+
+        String recordCount = restTemplate.getForObject(nodeServiceURL + "/recordCount", String.class);
+        model.addAttribute("recordCount", recordCount);
 
         return "greeting";
     }
