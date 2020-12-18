@@ -1,5 +1,8 @@
 package io.ambassador.ambcodequickstartapp.verylargejavaservice.rest;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -11,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
@@ -18,6 +22,7 @@ import java.util.Map;
 
 @Controller
 public class VeryLargeJavaWebPage {
+    Logger logger = LoggerFactory.getLogger(VeryLargeJavaWebPage.class);
 
     @Autowired
     private RestTemplate restTemplate;
@@ -28,24 +33,28 @@ public class VeryLargeJavaWebPage {
     @Value("${nodeservice.port}")
     String nodeServicePort;
 
-    @GetMapping("/greeting")
+    @GetMapping("/")
     public String greeting(@RequestParam(name = "name", required = false, defaultValue = "World") String name, Model model,
                            @RequestHeader Map<String, String> headers) {
         model.addAttribute("name", name);
 
-        System.out.println("Headers" + headers);
+        logger.info("Headers" + headers);
 
         String nodeServiceURL = "http://" + nodeServiceHost + ":" + nodeServicePort;
 
-        String color = restTemplate.getForObject(nodeServiceURL + "/color", String.class);
-        color = color.replace("\"", "");
-        model.addAttribute("color", color);
+        try {
+            String color = restTemplate.getForObject(nodeServiceURL + "/color", String.class);
+            color = color.replace("\"", "");
+            model.addAttribute("color", color);
 
-        String environment = restTemplate.getForObject(nodeServiceURL + "/environment", String.class);
-        model.addAttribute("environment", environment);
+            String environment = restTemplate.getForObject(nodeServiceURL + "/environment", String.class);
+            model.addAttribute("environment", environment);
 
-        String recordCount = restTemplate.getForObject(nodeServiceURL + "/recordCount", String.class);
-        model.addAttribute("recordCount", recordCount);
+            String recordCount = restTemplate.getForObject(nodeServiceURL + "/recordCount", String.class);
+            model.addAttribute("recordCount", recordCount);
+        } catch (RestClientException ex) {
+            logger.error(ex.toString());
+        }
 
         return "greeting";
     }
