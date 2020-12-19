@@ -1,0 +1,15 @@
+{
+  "name": "dataprocessingnodeservice",
+  "version": "0.0.1",
+  "description": "Ambassador Telepresence DataProcessingNodeService",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ambassador Labs",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "minimist": "^1.2.5"
+  }
+}
