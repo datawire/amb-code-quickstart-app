@@ -76,6 +76,7 @@ metadata:
   name:  verylargejavaservice
 spec:
   prefix: /verylargejavaservice
+  rewrite: /
   service: verylargejavaservice:8080
 
 ---
