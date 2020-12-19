@@ -2,20 +2,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontendnodeservice
+  name: dataprocessingnodeservice
 spec:
   selector:
     matchLabels:
-      run: frontendnodeservice
+      run: dataprocessingnodeservice
   replicas: 1
   template:
     metadata:
       labels:
-        run: frontendnodeservice
+        run: dataprocessingnodeservice
     spec:
       containers:
-      - name: frontendnodeservice
-        image: docker.io/danielbryantuk/frontendnodeservice
+      - name: dataprocessingnodeservice
+        image: docker.io/danielbryantuk/dataprocessingnodeservice
         ports:
         - containerPort: 3000
 
@@ -23,15 +23,15 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontendnodeservice
+  name: dataprocessingnodeservice
   labels:
-    run: frontendnodeservice
+    run: dataprocessingnodeservice
 spec:
   ports:
   - port: 3000
     protocol: TCP
   selector:
-    run: frontendnodeservice
+    run: dataprocessingnodeservice
 
 
 ---
