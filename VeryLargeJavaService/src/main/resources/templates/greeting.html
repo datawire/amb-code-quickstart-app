@@ -18,7 +18,8 @@
 <p th:text="'The contents of this page were generated from the \'' + ${environment} + '\' environment!'" />
 
 <p>The architecture that powers this page is shown below: </p>
-<img src="architecture.jpg" />
+
+<img th:src="'architecture-' + ${color} + '.jpg'"/>
 
 </body>
 </html>
