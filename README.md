@@ -60,4 +60,29 @@ telepresence intercept dataprocessingnodeservice --port 3000
 ```
 
 Refresh your browser page for AMBASSADOR_SERVICE_IP/verylargejavaservice to see the color and environment change based on the differences in the node service running on your local machine.
+
+You can easily see the intercepts that are available and running using the `list` command:
+
 ```
+telepresence list
+verylargedatastore       : traffic-agent not installed
+dataprocessingnodeservice: intercepted, redirecting port 6002 to 127.0.0.1:3000
+verylargejavaservice     : traffic-agent not installed
+```
+
+You can stop the intercept by using the `leave` command. Do this now:
+
+```
+telepresence leave dataprocessingnodeservice
+```
+
+## Previewing 
+
+You will need to login before generating a preview link with Ambassador Telepresence:
+
+```
+telepresence login
+telepresence intercept dataprocessingnodeservice --port 3000
+```
+
+Look in the web UI for your preview link.
