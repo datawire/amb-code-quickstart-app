@@ -7,4 +7,4 @@ RUN npm install
 COPY . .
 EXPOSE 3000
 
-CMD [ "node", "app", "-c green" ]
+CMD [ "node", "app", "-c", "green" ]
