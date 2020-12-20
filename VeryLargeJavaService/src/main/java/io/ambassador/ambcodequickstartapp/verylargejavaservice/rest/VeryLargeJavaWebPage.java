@@ -12,11 +12,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -76,5 +79,28 @@ public class VeryLargeJavaWebPage {
         model.addAttribute("color", color);
 
         return "greeting";
+    }
+
+    @GetMapping("/findMerch")
+    public String findMerch(Model model) {
+        model.addAttribute("merchSearch", new MerchSearch());
+        model.addAttribute("edgyMerchs", new LinkedList<EdgyMerch>());
+        return "form";
+    }
+
+    @PostMapping("/findMerch")
+    public String search(MerchSearch merchSearch, Model model) {
+        model.addAttribute("merchSearch", merchSearch);
+        try {
+            String nodeServiceURL = "http://" + nodeServiceHost + ":" + nodeServicePort;
+            List<EdgyMerch> edgyMerch = restTemplate.getForObject(nodeServiceURL + "/findMerch?country=" +
+                    merchSearch.getCountry() + "&season=" + merchSearch.getSeason(), List.class);
+            model.addAttribute("edgyMerchs", edgyMerch);
+        } catch (RestClientException ex) {
+            logger.error(ex.toString());
+        }
+        System.out.println(merchSearch.getCountry() + merchSearch.getSeason());
+        //todo get data
+        return "form";
     }
 }

@@ -1,4 +1,4 @@
-package io.ambassador.ambcodequickstartapp.verylargedatastore.service;
+package io.ambassador.ambcodequickstartapp.verylargejavaservice.rest;
 
 public class EdgyMerch {
     private String sku;
