@@ -11,6 +11,9 @@ const datastorePort = "8080"
 console.log(argv);
 
 var color = String(argv.c);
+if (color === 'undefined') {
+  color = "blue"
+} 
 
 var app = express();
 
