@@ -2,7 +2,7 @@ var argv = require('minimist')(process.argv.slice(2));
 var express = require("express");
 var request = require("request");
 
-const environment = "cloud"
+const environment = "local"
 const recordCount = 99999999999
 const datastoreHost = "http://verylargedatastore"
 const datastorePort = "8080"
