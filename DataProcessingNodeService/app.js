@@ -44,6 +44,24 @@ app.get("/recordCount", (req, res, next) => {
   });
  });
 
+app.get("/findMerch", (req, res, next) => {
+  console.log("findMerch accessed");
+
+  var country = req.query.country;
+  var season = req.query.season;
+  console.log(country);
+  console.log(season);
+
+  var searchURL = datastoreHost + ':' + datastorePort + '/findMerch?country=' + country + '&season=' + season;
+
+  request(searchURL, { json: true }, (err, resp, body) => {
+    if (err) { return console.log(err); }
+    console.log(body);
+
+    res.json(body);
+  });
+});
+
 app.listen(3000, () => {
  console.log("Welcome to the DataProcessingNodeService!");
  console.log("Server running on port 3000");
