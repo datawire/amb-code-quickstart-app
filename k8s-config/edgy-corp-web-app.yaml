@@ -78,7 +78,7 @@ spec:
   prefix: /verylargejavaservice
   rewrite: /
   service: verylargejavaservice:8080
-  timeout_ms: 30000
+  timeout_ms: 60000
 
 ---
 apiVersion: apps/v1
