@@ -19,7 +19,7 @@
 
 <p>The architecture that powers this page is shown below: </p>
 
-<img th:src="'architecture-' + ${color} + '.jpg'"/>
+<img th:src="'architecture-' + ${color != null ? color : 'default'} + '.jpg'"/>
 
 </body>
 </html>
