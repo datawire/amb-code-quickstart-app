@@ -1,7 +1,7 @@
 # amb-code-quickstart-app
 The Ambassador Code Quickstart App assumes you have access to an empty Kubernetes cluster and kubectl access to this cluster.
 
-First, install the AES Kubernetes Ingress.
+First, install the AES Kubernetes Ingress. If you want more configuration options for installing an Ingress (including cloud-specific load balancer config) please visit the [K8s Initializer](https://app.getambassador.io/initializer/)
 
 ```
 cd k8s-config
@@ -11,18 +11,22 @@ kubectl apply -f 1-aes-crds.yml && kubectl wait --for condition=established --ti
 kubectl apply -f 2-aes.yml && kubectl wait -n ambassador deploy -lproduct=aes --for condition=available --timeout=90s
 ```
 
-Wait a few moments for an IP address to be assigned to the external load balancer.
+Wait a few moments for an IP address to be assigned to the external load balancer. If you are using the AES, you can run this command:
 
 ```
 AMBASSADOR_SERVICE_IP=$(kubectl get service -n ambassador ambassador -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 echo $AMBASSADOR_SERVICE_IP
 ```
 
-Now install the EdgyCorp Web App into your cluster
+Now install the EdgyCorp Web App into your cluster:
 
 ```
 kubectl apply -f edgy-corp-web-app.yaml 
+```
 
+You can verify the Services and Pods have been installed correctly using the following commands:
+
+```
 kubectl get svc
 NAME                        TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
 dataprocessingnodeservice   ClusterIP   10.3.249.16    <none>        3000/TCP   9s
@@ -37,7 +41,10 @@ verylargedatastore-855c8b8789-wz4x8          1/1     Running   0          36s
 verylargejavaservice-7dfddbc95c-j2twh        1/1     Running   0          36s
 
 ```
-Access AMBASSADOR_SERVICE_IP/verylargejavaservice in your browser, and note the title color and the image.
+
+Next, access AMBASSADOR_SERVICE_IP/verylargejavaservice/ in your browser, and note the title color and the architecture of the application you have just deployed that is shown in the image.
+
+![alt text](app-architecture-screenshot.jpg "EdgyCorp Web App Architecture")
 
 
 ## Setup your local Node development environment
@@ -50,16 +57,19 @@ If you don't already have Node installed on your local machine, instructions can
 cd ../DataProcessingNodeService
 
 npm install
+
+# This application will run on port 3000 by default and the -c param specifies the color variable that the VeryLargeJavaService calls via the `/color` API endpoint.
 node app -c blue
 ```
 
 ## Telepresence 
+Now you can create an intercept on the dataprocessingnodeservice Service and route remote traffic to port 3000 on your local machine.
 
 ```
 telepresence intercept dataprocessingnodeservice --port 3000
 ```
 
-Refresh your browser page for AMBASSADOR_SERVICE_IP/verylargejavaservice to see the color and environment change based on the differences in the node service running on your local machine.
+Refresh your browser page for $AMBASSADOR_SERVICE_IP/verylargejavaservice/ to see the color and environment change based on the differences in the node service running on your local machine.
 
 You can easily see the intercepts that are available and running using the `list` command:
 
