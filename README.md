@@ -62,8 +62,15 @@ npm install
 node app -c blue
 ```
 
-## Telepresence 
+## Configuring Telepresence 
 Now you can create an intercept on the dataprocessingnodeservice Service and route remote traffic to port 3000 on your local machine.
+
+First login:
+```
+telepresence login
+```
+
+Now set up the intercept:
 
 ```
 telepresence intercept dataprocessingnodeservice --port 3000
@@ -80,19 +87,83 @@ dataprocessingnodeservice: intercepted, redirecting port 6002 to 127.0.0.1:3000
 verylargejavaservice     : traffic-agent not installed
 ```
 
-You can stop the intercept by using the `leave` command. Do this now:
+## Fast Debugging with Telepresence
+
+Next, stop the node process running in the terminal and open the app.js file in your favourite IDE. Here we'll use Visual Studio code
+
+```
+(ctrl-c on node process)
+Open Visual Studio Code
+```
+Run the app.js file by clicking on the "Run" side navigation option, selecting "Run Current File" from the run/debug dropdown box that appears, and clicking the "Run" triangular icon.
+
+![alt text](debug-with-vscode.jpg "Debug with VSCode and Telepresence")
+
+With the app now running you can refresh your browser pointing at $AMBASSADOR_SERVICE_IP/verylargejavaservice/ and see the Debug Console logging that your local service running in debug mode has been accessed. The web page should render normally with the default local color of blue.
+
+You can now set breakpoints and watches on the app.js code, just as you would normally do when debugging. Every time you hit refresh in your browser the VeryLargeJavaService will connect via Telepresence to your locally running service.
+
+Remember to set a high timeout on your Ingress (e.g. 60 seconds) if you want to explore code and variable content when your breakpoint is hit without the user request made via the Ingress from timing out.
+
+When you have finished debugging you can stop the intercept by using the `leave` command. Do this now:
 
 ```
 telepresence leave dataprocessingnodeservice
 ```
 
-## Previewing 
+## Previewing Changes with a Friend or Colleague
 
-You will need to login before generating a preview link with Ambassador Telepresence:
+You will need to login before generating a preview link with Ambassador Telepresence. Let's try this now, and set up a new intercept with the dataprocessingnodeservice:
 
 ```
 telepresence login
 telepresence intercept dataprocessingnodeservice --port 3000
 ```
+Your preview link will be shown below the command, and can also be found in the Ambassador Cloud web UI.
 
-Look in the web UI for your preview link.
+```
+Using deployment dataprocessingnodeservice
+intercepted, redirecting port 0 to 127.0.0.1:3000
+    Intercepting all requests
+    Preview URL: https://recursing-benz-1011.preview-beta.edgestack.me
+``` 
+
+Run the app.js file locally via your IDE. If you are using VSCode you can do this by clicking on the "Run" side navigation option, selecting "Run Current File" from the run/debug dropdown box that appears, and clicking the "Run" triangular icon.
+
+Share the preview link with a friend or colleague via a Slack, Teams, or email message.
+
+```
+Hi, join me for collaborative bug hunting session with Ambassador Telepresence. Access via the preview link and see me making code changes live while only running one service locally!
+
+Preview URL: https://recursing-benz-1011.preview-beta.edgestack.me
+```
+
+Once they have authenticated via Ambassador Code they will be able to see the results of your dataprocessingnodeservice interception i.e. they can see the results of any local changes you make. The authentication step ensures that only people from the same organization can access your preview links.
+
+Get your friend to tell you when they can see the EdgyCorp WebApp home page. Tell them to look at the application architecture diagram and note that you are running the DataProcessingNodeService locally and all the other services are running in a remote cluster.
+
+Now get your friend to click on the link at the bottom of the page "Join a friend for some collaborative bug hunting!"
+
+On the "EdgyCorp: Merchandise Search" page that loads have your friend select options in the radio boxes and click "Submit". Search results should be displayed in the table below the search.
+
+![alt text](edgycorp-merch-search.jpg "EdgyCorp Merch Search")
+
+As your friend is searching note that you can see the logging statements in your console or debug output.
+
+One combination of "country" and "season" results in no records being displayed. This is a bug. 
+
+Once your friend has found the bug set a breakpoint in your code in the `findMerch` API endpoint and look at the verylargedatastore search query being generated.
+
+As you are connected to the Kubernetes cluster via Ambassador Telepresence, you can also curl the remote verylargedatastore as if you were in the cluster. There is an endpoint that allows you to see all of the seasons available in the data store:
+
+```
+curl http://verylargedatastore:8080/seasons
+```
+
+Based on the search query and the results from the seasons query, can you see what the bug may be?
+
+You can experiment by curling the verylargedatastore with an updated query and seeing if results are returned
+
+Once you have found the bug, see if you can modify the code in the `findMerch` API endpoint to address this issue. 
+
+When you have made the change, restart app.js via your IDE and have your friend make the same search via their preview link web page. Does the fix work?
