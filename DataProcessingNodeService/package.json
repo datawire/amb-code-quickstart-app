@@ -9,8 +9,8 @@
   "author": "Ambassador Labs",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.21.1",
     "express": "^4.17.1",
-    "minimist": "^1.2.5",
-    "request": "^2.88.2"
+    "minimist": "^1.2.5"
   }
 }

@@ -1,68 +1,92 @@
-var argv = require('minimist')(process.argv.slice(2));
-var express = require("express");
-var request = require("request");
+const argv = require('minimist')(process.argv.slice(2));
+const express = require("express");
+const axios = require("axios");
 
-const environment = "local"
-const recordCount = 99999999999
-const datastoreHost = "http://verylargedatastore"
-const datastorePort = "8080"
+const DEFAULT_ENV = "local";
+const DEFAULT_COLOR = "blue";
+const DEFAULT_DATASTORE_URL = "http://verylargedatastore:8080";
+const DEFAULT_PORT = 3000;
 
-
+console.log("Welcome to the DataProcessingNodeService!");
 console.log(argv);
 
+// Configure app via command line params
 var color = String(argv.c);
 if (color === 'undefined') {
-  color = "blue"
+  color = DEFAULT_COLOR;
 } 
 
+var datastoreURL = String(argv.d);
+if (datastoreURL === 'undefined') {
+  datastoreURL = DEFAULT_DATASTORE_URL;
+}
+
+var port = String(argv.d);
+if (port === 'undefined') {
+  port = DEFAULT_PORT;
+}
+
+
+// Configure Express REST API Endpoints
 var app = express();
 
+// Root
 app.get("/", (req, res, next) => {
+  res.json("root endpoint entry (DataProcessingNodeService)");
   console.log(req);
-  res.json("root accessed (DataProcessingNodeService)");
  });
 
+// Color
 app.get("/color", (req, res, next) => {
-  console.log("color accessed");
+  console.log("color endpoint entry");
   res.json(color);
  });
 
+ // Environment
 app.get("/environment", (req, res, next) => {
-  console.log("environment accessed");
-  res.json(environment);
+  console.log("environment endpoint entry");
+  res.json(DEFAULT_ENV);
  });
 
+// recordCount (get the number of records via a call to the datastore service)
 app.get("/recordCount", (req, res, next) => {
-  console.log("recordCount accessed");
-  
-  request(datastoreHost + ':' + datastorePort + '/recordCount', { json: true }, (err, resp, body) => {
-    if (err) { return console.log(err); }
-    console.log(body);
+  console.log("recordCount endpoint entry");
 
-    var datastoreRecordCount = body + 1;
-    res.json(datastoreRecordCount);
-  });
+  axios.get(datastoreURL + '/recordCount')
+    .then(function (response) {    
+        console.log(response.data);
+        var datastoreRecordCount = response.data;
+        res.json(datastoreRecordCount);
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
  });
 
+// findMerch (find EdgyCorp merchandise matching search params via datastore service)
 app.get("/findMerch", (req, res, next) => {
-  console.log("findMerch accessed");
+  console.log("findMerch endpoint entry");
 
+  // extract search params from query string
   var country = req.query.country;
   var season = req.query.season;
   console.log(country);
   console.log(season);
 
-  var searchURL = datastoreHost + ':' + datastorePort + '/findMerch?country=' + country + '&season=' + season;
+  // generate searchQuery to send to datastore 
+  var searchQuery = datastoreURL + '/findMerch?country=' + country + '&season=' + season;
 
-  request(searchURL, { json: true }, (err, resp, body) => {
-    if (err) { return console.log(err); }
-    console.log(body);
-
-    res.json(body);
-  });
+  axios.get(searchQuery)
+    .then(function (response) {   
+       console.log(response.data);
+       res.json(response.data);
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
 });
 
-app.listen(3000, () => {
- console.log("Welcome to the DataProcessingNodeService!");
- console.log("Server running on port 3000");
+// Start the Express service
+app.listen(port, () => {
+ console.log("Server running on port " + port);
 });
