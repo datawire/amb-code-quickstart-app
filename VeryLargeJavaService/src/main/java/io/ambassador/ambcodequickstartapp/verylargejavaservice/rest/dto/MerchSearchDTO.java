@@ -1,13 +1,13 @@
-package io.ambassador.ambcodequickstartapp.verylargejavaservice.rest;
+package io.ambassador.ambcodequickstartapp.verylargejavaservice.rest.dto;
 
-public class MerchSearch {
+public class MerchSearchDTO {
     private String country;
     private String season;
 
-    public MerchSearch() {
+    public MerchSearchDTO() {
     }
 
-    public MerchSearch(String country, String season) {
+    public MerchSearchDTO(String country, String season) {
         this.country = country;
         this.season = season;
     }

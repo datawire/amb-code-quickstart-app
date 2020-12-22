@@ -1,12 +1,15 @@
-package io.ambassador.ambcodequickstartapp.verylargejavaservice.rest;
+package io.ambassador.ambcodequickstartapp.verylargejavaservice.rest.dto;
 
-public class EdgyMerch {
+public class EdgyMerchDTO {
     private String sku;
     private String descript;
     private String country;
     private String season;
 
-    public EdgyMerch(String sku, String descript, String country, String season) {
+    public EdgyMerchDTO() {
+    }
+
+    public EdgyMerchDTO(String sku, String descript, String country, String season) {
         this.sku = sku;
         this.descript = descript;
         this.country = country;

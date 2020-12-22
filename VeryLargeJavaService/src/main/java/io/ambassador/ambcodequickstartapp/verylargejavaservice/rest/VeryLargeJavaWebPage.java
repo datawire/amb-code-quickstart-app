@@ -1,14 +1,12 @@
 package io.ambassador.ambcodequickstartapp.verylargejavaservice.rest;
 
 
+import io.ambassador.ambcodequickstartapp.verylargejavaservice.rest.dto.EdgyMerchDTO;
+import io.ambassador.ambcodequickstartapp.verylargejavaservice.rest.dto.MerchSearchDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +23,8 @@ import java.util.Map;
 
 @Controller
 public class VeryLargeJavaWebPage {
-    Logger logger = LoggerFactory.getLogger(VeryLargeJavaWebPage.class);
+
+    private static Logger LOGGER = LoggerFactory.getLogger(VeryLargeJavaWebPage.class);
 
     @Autowired
     private RestTemplate restTemplate;
@@ -37,11 +36,9 @@ public class VeryLargeJavaWebPage {
     String nodeServicePort;
 
     @GetMapping("/")
-    public String greeting(@RequestParam(name = "name", required = false, defaultValue = "World") String name, Model model,
+    public String welcome(@RequestParam(name = "name", required = false, defaultValue = "World") String name, Model model,
                            @RequestHeader Map<String, String> headers) {
-        model.addAttribute("name", name);
-
-        logger.info("Headers" + headers);
+        LOGGER.info("greeting entry");
 
         String nodeServiceURL = "http://" + nodeServiceHost + ":" + nodeServicePort;
 
@@ -56,51 +53,34 @@ public class VeryLargeJavaWebPage {
             String recordCount = restTemplate.getForObject(nodeServiceURL + "/recordCount", String.class);
             model.addAttribute("recordCount", recordCount);
         } catch (RestClientException ex) {
-            logger.error(ex.toString());
+            LOGGER.error(ex.toString());
         }
 
-        return "greeting";
-    }
-
-    @GetMapping("/greetingHeaders")
-    public String greetingWithHeaders(@RequestParam(name = "name", required = false, defaultValue = "World") String name, Model model,
-                                      @RequestHeader Map<String, String> clientHeaders) {
-        model.addAttribute("name", name);
-
-        System.out.println("Headers" + clientHeaders);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(clientHeaders.get("testkey"), clientHeaders.get("testvalue"));
-        HttpEntity<String> entity = new HttpEntity<String>(headers);
-
-        ResponseEntity<String> response = restTemplate.exchange("http://localhost:3000/color", HttpMethod.GET, entity, String.class);
-        System.out.println(response.getBody());
-        String color = response.getBody().toString();
-        color = color.replace("\"", "");
-        model.addAttribute("color", color);
-
-        return "greeting";
+        return "welcome";
     }
 
     @GetMapping("/findMerch")
-    public String findMerch(Model model) {
-        model.addAttribute("merchSearch", new MerchSearch());
-        model.addAttribute("edgyMerchs", new LinkedList<EdgyMerch>());
-        return "form";
+    public String findMerchForm(Model model) {
+        LOGGER.info("findMerch GET entry");
+
+        model.addAttribute("merchSearch", new MerchSearchDTO());
+        model.addAttribute("edgyMerchs", new LinkedList<EdgyMerchDTO>());
+        return "merchSearchForm";
     }
 
     @PostMapping("/findMerch")
-    public String search(MerchSearch merchSearch, Model model) {
-        model.addAttribute("merchSearch", merchSearch);
+    public String searchMerch(MerchSearchDTO merchSearchDTO, Model model) {
+        LOGGER.info("search POST entry");
+
+        model.addAttribute("merchSearch", merchSearchDTO);
         try {
             String nodeServiceURL = "http://" + nodeServiceHost + ":" + nodeServicePort;
-            List<EdgyMerch> edgyMerch = restTemplate.getForObject(nodeServiceURL + "/findMerch?country=" +
-                    merchSearch.getCountry() + "&season=" + merchSearch.getSeason(), List.class);
+            List<EdgyMerchDTO> edgyMerch = restTemplate.getForObject(nodeServiceURL + "/findMerch?country=" +
+                    merchSearchDTO.getCountry() + "&season=" + merchSearchDTO.getSeason(), List.class);
             model.addAttribute("edgyMerchs", edgyMerch);
         } catch (RestClientException ex) {
-            logger.error(ex.toString());
+            LOGGER.error(ex.toString());
         }
-        System.out.println(merchSearch.getCountry() + merchSearch.getSeason());
-        //todo get data
-        return "form";
+        return "merchSearchForm";
     }
 }
