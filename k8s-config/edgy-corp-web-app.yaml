@@ -81,6 +81,16 @@ spec:
   timeout_ms: 60000
 
 ---
+apiVersion: getambassador.io/v2
+kind:  Mapping
+metadata:
+  name: root
+spec:
+  prefix: /
+  path_redirect: /verylargejavaservice
+  service: verylargejavaservice:8080
+  timeout_ms: 60000
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
