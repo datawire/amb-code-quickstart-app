@@ -75,19 +75,8 @@ kind:  Mapping
 metadata:
   name:  verylargejavaservice
 spec:
-  prefix: /verylargejavaservice
-  rewrite: /
-  service: verylargejavaservice:8080
-  timeout_ms: 60000
-
----
-apiVersion: getambassador.io/v2
-kind:  Mapping
-metadata:
-  name: root
-spec:
   prefix: /
-  path_redirect: /verylargejavaservice
+  rewrite: /
   service: verylargejavaservice:8080
   timeout_ms: 60000
 ---
