@@ -75,11 +75,10 @@ kind:  Mapping
 metadata:
   name:  verylargejavaservice
 spec:
-  prefix: /verylargejavaservice
+  prefix: /
   rewrite: /
   service: verylargejavaservice:8080
   timeout_ms: 60000
-
 ---
 apiVersion: apps/v1
 kind: Deployment
