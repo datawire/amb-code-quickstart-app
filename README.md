@@ -42,7 +42,7 @@ verylargejavaservice-7dfddbc95c-j2twh        1/1     Running   0          36s
 
 ```
 
-Next, access AMBASSADOR_SERVICE_IP/verylargejavaservice/ in your browser, and note the title color and the architecture of the application you have just deployed that is shown in the image.
+Next, access AMBASSADOR_SERVICE_IP/ in your browser, and note the title color and the architecture of the application you have just deployed that is shown in the image.
 
 ![alt text](app-architecture-screenshot.jpg "EdgyCorp Web App Architecture")
 
@@ -76,7 +76,7 @@ Now set up the intercept:
 telepresence intercept dataprocessingnodeservice --port 3000
 ```
 
-Refresh your browser page for $AMBASSADOR_SERVICE_IP/verylargejavaservice/ to see the color and environment change based on the differences in the node service running on your local machine.
+Refresh your browser page for $AMBASSADOR_SERVICE_IP/ to see the color and environment change based on the differences in the node service running on your local machine.
 
 You can easily see the intercepts that are available and running using the `list` command:
 
@@ -99,7 +99,7 @@ Run the app.js file by clicking on the "Run" side navigation option, selecting "
 
 ![alt text](debug-with-vscode.jpg "Debug with VSCode and Telepresence")
 
-With the app now running you can refresh your browser pointing at $AMBASSADOR_SERVICE_IP/verylargejavaservice/ and see the Debug Console logging that your local service running in debug mode has been accessed. The web page should render normally with the default local color of blue.
+With the app now running you can refresh your browser pointing at $AMBASSADOR_SERVICE_IP/ and see the Debug Console logging that your local service running in debug mode has been accessed. The web page should render normally with the default local color of blue.
 
 You can now set breakpoints and watches on the app.js code, just as you would normally do when debugging. Every time you hit refresh in your browser the VeryLargeJavaService will connect via Telepresence to your locally running service.
 
