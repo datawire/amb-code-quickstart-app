@@ -13,7 +13,7 @@
 <body>
 <h1 th:style="'color:' + ${color}">Welcome to the EdgyCorp WebApp</h1>
 
-<p th:text="'There are ' + ${recordCount} + ' database records available to search!'" />
+<p th:text="'There are ' + ${#strings.substring(recordCount,0,3)} + ' billion database records available to search!'" />
 
 <p th:text="'The contents of this page were generated from the \'' + ${environment} + '\' environment!'" />
 
