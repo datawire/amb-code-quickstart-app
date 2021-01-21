@@ -76,6 +76,14 @@ Now set up the intercept:
 telepresence intercept dataprocessingnodeservice --port 3000
 ```
 
+You will be prompted to specify hostname, port, and TLS options for the intercept. Be sure to specify 80 for the port and "n" for TLS:
+
+```
+Hostname [ambassador.ambassador] ?
+Port [443] ? 80
+Use TLS y/n [y] ? n
+```
+
 Refresh your browser page for $AMBASSADOR_SERVICE_IP/ to see the color and environment change based on the differences in the node service running on your local machine.
 
 You can easily see the intercepts that are available and running using the `list` command:
@@ -119,13 +127,25 @@ You will need to login before generating a preview link with Ambassador Telepres
 telepresence login
 telepresence intercept dataprocessingnodeservice --port 3000
 ```
+
+Again, you will be prompted to specify hostname, port, and TLS options for the intercept. This time, you can accept the defaults:
+
+```
+Hostname [ambassador.ambassador] ?
+Port [80] ?
+Use TLS y/n [n] ?
+```
+
 Your preview link will be shown below the command, and can also be found in the Ambassador Cloud web UI.
 
 ```
 Using deployment dataprocessingnodeservice
-intercepted, redirecting port 0 to 127.0.0.1:3000
-    Intercepting all requests
-    Preview URL: https://recursing-benz-1011.preview-beta.edgestack.me
+intercepted
+    State       : ACTIVE
+    Destination : 127.0.0.1:3000
+    Intercepting: HTTP requests that match all of:
+      header("x-telepresence-intercept-id") ~= regexp("e105abbe-7500-46a0-a0a6-003fd2f48414:dataprocessingnodeservice")
+    Preview URL : https://recursing-benz-1011.preview-beta.edgestack.me
 ``` 
 
 Run the app.js file locally via your IDE. If you are using VSCode you can do this by clicking on the "Run" side navigation option, selecting "Run Current File" from the run/debug dropdown box that appears, and clicking the "Run" triangular icon.
