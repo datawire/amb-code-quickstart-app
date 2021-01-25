@@ -149,7 +149,7 @@ Run the app.js file locally via your IDE. If you are using VSCode you can do thi
 
 Note that if you view the app via the preview URL you will see the intercepted version of the dataprocessingnodeservice that is running locally on your machine and displays the color blue. 
 
-If you view the app via the AMBASSADOR_IP or regular URL you will see the default non-intercepted version of the dataprocessingnodeservice, and the color will be green. The preview URL injects a header into the request that allows you to create a selective intercept. Only people you share the preview URL with will be able to see the results of changes to your local intercepted service.
+If you view the app via the AMBASSADOR_SERVICE_IP or regular URL you will see the default non-intercepted version of the dataprocessingnodeservice, and the color will be green. The preview URL injects a header into the request that allows you to create a selective intercept. Only people you share the preview URL with will be able to see the results of changes to your local intercepted service.
 
 Share the preview link with a friend or colleague via a Slack, Teams, or email message.
 
