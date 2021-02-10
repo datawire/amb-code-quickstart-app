@@ -1,4 +1,6 @@
-# amb-code-quickstart-app
+## This repo has been archived, new current version is here: https://github.com/datawire/edgey-corp-nodejs
+
+## amb-code-quickstart-app
 The Ambassador Telepresence Quickstart App assumes that you have already installed Ambassador Telepresence locally, and also that you have access to an empty Kubernetes cluster and kubectl access to this cluster.
 
 First, install the AES Kubernetes Ingress. If you want more configuration options for installing an Ingress (including cloud-specific load balancer config) please visit the [K8s Initializer](https://app.getambassador.io/initializer/)
